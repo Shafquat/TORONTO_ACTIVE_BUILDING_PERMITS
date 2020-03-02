@@ -6,43 +6,43 @@ library(leaflet)
 
 ### Data Manipulation ###
   
-# # Load data
-# permit_data <- read.csv("C:\\Users\\sarefee\\Documents\\R\\20-02-25 Building Permits\\activepermits.csv")
-# geo_id_data <- read.csv("C:\\Users\\sarefee\\Documents\\R\\20-02-25 Building Permits\\GeoIDs.csv")
-# 
-# # Remove "DO NOT UPDATE OR DELETE THIS INFO FIELD" from EST_CONST_COST field
-# permit_data$EST_CONST_COST <- str_replace(permit_data$EST_CONST_COST,"DO NOT UPDATE OR DELETE THIS INFO FIELD","")
-# 
-# # Sort by Construction Cost
-# permit_data <- permit_data[order(permit_data$EST_CONST_COST, decreasing = TRUE),]
-# 
-# # Calculate the Time between Application and Issued date
-# permit_data$time_to_issue <- as.Date(as.character(permit_data$ISSUED_DATE), format="%m/%d/%Y")-
-#   as.Date(as.character(permit_data$APPLICATION_DATE), format="%m/%d/%Y")
-# 
-# # Create an Application Year Field
-# permit_data$APPLICATION_YEAR <- str_sub(permit_data$APPLICATION_DATE,-4,-1)
-# 
-# 
-# #remove extra whitespace from Street Direction field
-# permit_data$STREET_DIRECTION <- str_trim(permit_data$STREET_DIRECTION)
-# 
-# # Create an Address field
-# permit_data$ADDRESS <- ifelse(str_length(permit_data$STREET_DIRECTION)==0,
-#   paste0(permit_data$STREET_NUM," ",permit_data$STREET_NAME," ",permit_data$STREET_TYPE,
-#          ", ",permit_data$POSTAL),
-#   paste0(permit_data$STREET_NUM," ",permit_data$STREET_NAME," ",permit_data$STREET_TYPE,
-#          " ",permit_data$STREET_DIRECTION,", ",permit_data$POSTAL)
-#   )
-# 
-# # Inner join to get mapping coordinates for applicable GEO_IDs
-# pdwc <- merge(x=permit_data, y=geo_id_data, by="GEO_ID")
+# Load data
+permit_data <- read.csv("C:\\Users\\sarefee\\Documents\\R\\20-02-25 Building Permits\\activepermits.csv")
+geo_id_data <- read.csv("C:\\Users\\sarefee\\Documents\\R\\20-02-25 Building Permits\\GeoIDs.csv")
+
+# Remove "DO NOT UPDATE OR DELETE THIS INFO FIELD" from EST_CONST_COST field
+permit_data$EST_CONST_COST <- str_replace(permit_data$EST_CONST_COST,"DO NOT UPDATE OR DELETE THIS INFO FIELD","")
+
+# Sort by Construction Cost
+permit_data <- permit_data[order(permit_data$EST_CONST_COST, decreasing = TRUE),]
+
+# Calculate the Time between Application and Issued date
+permit_data$time_to_issue <- as.Date(as.character(permit_data$ISSUED_DATE), format="%m/%d/%Y")-
+  as.Date(as.character(permit_data$APPLICATION_DATE), format="%m/%d/%Y")
+
+# Create an Application Year Field
+permit_data$APPLICATION_YEAR <- str_sub(permit_data$APPLICATION_DATE,-4,-1)
+
+
+#remove extra whitespace from Street Direction field
+permit_data$STREET_DIRECTION <- str_trim(permit_data$STREET_DIRECTION)
+
+# Create an Address field
+permit_data$ADDRESS <- ifelse(str_length(permit_data$STREET_DIRECTION)==0,
+  paste0(permit_data$STREET_NUM," ",permit_data$STREET_NAME," ",permit_data$STREET_TYPE,
+         ", ",permit_data$POSTAL),
+  paste0(permit_data$STREET_NUM," ",permit_data$STREET_NAME," ",permit_data$STREET_TYPE,
+         " ",permit_data$STREET_DIRECTION,", ",permit_data$POSTAL)
+  )
+
+# Inner join to get mapping coordinates for applicable GEO_IDs
+pdwc <- merge(x=permit_data, y=geo_id_data, by="GEO_ID")
 
 ### Shiny Dashboard ###
 
 # Data consolidation for optimized dashboard
-permit_data <- read.csv("activepermits_cleaned.csv")
-pdwc <- permit_data[complete.cases(permit_data$LATITUDE),]
+#permit_data <- read.csv("activepermits_cleaned.csv")
+#pdwc <- permit_data[complete.cases(permit_data$LATITUDE),]
 
 # Define UI for app that creates a dashboard ----
 ui <- fluidPage(
